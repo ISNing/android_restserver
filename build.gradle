@@ -1,0 +1,19 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 26
+    buildToolsVersion "26.0.0"
+
+    defaultConfig {
+        minSdkVersion 9
+        targetSdkVersion 26
+    }
+}
+
+dependencies {
+    //JUnit 4
+    testCompile 'junit:junit:4.12'
+
+    //NanoHTTPD
+    compile 'org.nanohttpd:nanohttpd:2.3.1'
+}
