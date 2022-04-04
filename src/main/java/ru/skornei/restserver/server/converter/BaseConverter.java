@@ -3,18 +3,18 @@ package ru.skornei.restserver.server.converter;
 public interface BaseConverter {
 
     /**
-     * Преобразовать объект в массив байт
-     * @param value объект
-     * @return массив байт
+     * Convert object to byte array
+     * @param value Object
+     * @return Byte array
      */
     byte[] writeValueAsBytes(Object value);
 
     /**
-     * Получить из массива байт объект
-     * @param src массив байт
-     * @param valueType тип объекта
-     * @param <T>
-     * @return объект
+     * Get object from byte array
+     * @param src Byte array
+     * @param valueType Object type class
+     * @param <T> Target object type
+     * @return Object
      */
     <T> T writeValue(byte[] src, Class<T> valueType);
 }

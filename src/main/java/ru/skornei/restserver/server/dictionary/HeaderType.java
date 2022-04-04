@@ -13,7 +13,7 @@ public interface HeaderType {
     String CONTENT_TYPE = "content-type";
 
     /**
-     * Авторизация
+     * Authorization
      */
     String CONTENT_AUTHORIZATION = "authorization";
 }

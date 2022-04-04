@@ -9,17 +9,17 @@ import ru.skornei.restserver.server.dictionary.ResponseStatus;
 public class ResponseInfo {
 
     /**
-     * Статус
+     * Status
      */
     private ResponseStatus status = ResponseStatus.OK;
 
     /**
-     * Тип
+     * Type
      */
     private String type = ContentType.TEXT_PLAIN;
 
     /**
-     * Тело запроса
+     * Query body
      */
     private byte[] body;
 

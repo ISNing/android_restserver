@@ -5,9 +5,9 @@ import ru.skornei.restserver.server.protocol.RequestInfo;
 public interface BaseAuthentication {
 
     /**
-     * Аутентификация
-     * @param requestInfo параметры запроса
-     * @return прошла аутентификация или нет
+     * Authentication
+     * @param requestInfo Query options
+     * @return Authenticated or not
      */
     boolean authentication(RequestInfo requestInfo);
 }

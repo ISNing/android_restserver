@@ -6,22 +6,22 @@ import java.util.Map;
 public class RequestInfo {
 
     /**
-     * IP адрес отправителя
+     * Sender IP address
      */
     private String remoteIpAddress;
 
     /**
-     * Заголовки
+     * Headers
      */
     private Map<String, String> headers;
 
     /**
-     * Параметры
+     * Parameters
      */
     private Map<String, List<String>> parameters;
 
     /**
-     * Тело
+     * Body
      */
     private byte[] body;
 

@@ -90,11 +90,11 @@ public class ReflectionUtils {
     }
 
     /**
-     * Получаем метод с нужной аннотацией
-     * @param object объект
-     * @param type класс
-     * @param annotationClass аннотация
-     * @return метод
+     * Get a method that needs annotation
+     * @param object Object
+     * @param type Class
+     * @param annotationClass Annotation
+     * @return Method
      */
     public static MethodInfo getDeclaredMethodInfo(Object object, Class<?> type, Class annotationClass) {
         Method[] methods = type.getMethods();

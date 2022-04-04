@@ -25,32 +25,29 @@ import ru.skornei.restserver.utils.ReflectionUtils;
 public abstract class BaseRestServer {
 
     /**
-     * Http сервер
+     * HTTP Server
      */
     private HttpServer httpServer;
 
     /**
-     * Контроллеры обработчики запросов
+     * Preview Manager Controller
      */
     private Map<String, Class> controllers = new HashMap<>();
 
     /**
-     * Конвертер объектов
+     * Object Converter
      */
     private BaseConverter converter;
 
     /**
-     * Аутентификация
+     * Authentication
      */
     private BaseAuthentication authentication;
 
-    /**
-     * Создаем rest сервер
-     */
     public BaseRestServer() {
         RestServer restServer = getClass().getAnnotation(RestServer.class);
         if (restServer != null) {
-            //Создаем конвертер
+            //Create converter
             if (!restServer.converter().equals(void.class) &&
                     BaseConverter.class.isAssignableFrom(restServer.converter())) {
                 try {
@@ -60,7 +57,7 @@ public abstract class BaseRestServer {
                 }
             }
 
-            //Создаем класс аутентификации
+            //Create authentication class
             if (!restServer.authentication().equals(void.class) &&
                     BaseAuthentication.class.isAssignableFrom(restServer.authentication())) {
                 try {
@@ -70,7 +67,7 @@ public abstract class BaseRestServer {
                 }
             }
 
-            //Получаем контроллеры
+            //Create class to get controller
             for (Class<?> cls : restServer.controllers()) {
                 if (cls.isAnnotationPresent(RestController.class)) {
                     RestController restController = cls.getAnnotation(RestController.class);
@@ -78,7 +75,7 @@ public abstract class BaseRestServer {
                 }
             }
 
-            //Создаем сервер
+            //Create server
             httpServer = new HttpServer(restServer.port());
         } else {
             throw new NoAnnotationException(getClass().getSimpleName(), RestServer.class.getSimpleName());
@@ -86,24 +83,24 @@ public abstract class BaseRestServer {
     }
 
     /**
-     * Запускаем сервер
-     * @throws IOException
+     * Start server
+     * @throws IOException IOException form {@link .HTTPServer)
      */
     public void start() throws IOException {
         httpServer.start();
     }
 
     /**
-     * Останавливаем сервер
+     * Stop server
      */
     public void stop() {
         httpServer.stop();
     }
 
     /**
-     * Получить контроллер для этого адреса
-     * @param uri адрес
-     * @return контроллер
+     * Get the controller for address
+     * @param uri Address
+     * @return Controller
      */
     private Class getController(String uri) {
         if (controllers.containsKey(uri))
@@ -122,10 +119,10 @@ public abstract class BaseRestServer {
         }
 
         /**
-         * Получаем данные от клиента
+         * Get data from customers
          *
-         * @param session сессия
-         * @return ответ
+         * @param session Session
+         * @return Response
          */
         @Override
         public Response serve(IHTTPSession session) {

@@ -10,26 +10,26 @@ import java.lang.annotation.Target;
 public @interface RestServer {
 
     /**
-     * Порт сервера
-     * @return порт
+     * Server port
+     * @return Port
      */
     int port();
 
     /**
-     * Конвертер объектов
-     * @return класс конвертера
+     * Object Converter Class
+     * @return Converter class
      */
     Class<?> converter() default void.class;
 
     /**
-     * Аунтификатор
-     * @return класс аунтификатор
+     * Authentication class
+     * @return Authentication class
      */
     Class<?> authentication() default void.class;
 
     /**
-     * Контроллеры сервера
-     * @return список классов
+     * Server controller clazz
+     * @return Controller Class list
      */
     Class<?>[] controllers();
 }
