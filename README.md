@@ -1,10 +1,10 @@
-Android Rest Server
+Android REST Server
 ========
+REST Server for Android.
 
-Rest Server for Android.
+![jitpack](https://jitpack.io/v/ISNing/android_restserver.svg)
 
 ## Download
-
 Gradle:
 ```groovy
 repositories {
@@ -12,17 +12,19 @@ repositories {
     maven { url "https://jitpack.io" }
 }
 
-compile 'com.github.skornei:restserver:1.0.4+'
+implementation 'com.github.ISNing:android_restserver:Tag'
 ```
+You also can use the short commit hash or 'master-SNAPSHOT' as the version.
 
 ## Documentation
-* [Getting started](https://github.com/skornei/restserver/wiki/Getting-started)
+* [Getting started](https://github.com/ISNing/android_restserver/wiki/Getting-started)
 
 ## License
 
 [Apache Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.html)
 
     Copyright (C) 2017 Sergei Kornei
+              (C) 2022 ISNing
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
