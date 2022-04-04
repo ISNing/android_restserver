@@ -1,6 +1,7 @@
 package ru.skornei.restserver.server;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,7 +18,9 @@ import ru.skornei.restserver.server.authentication.BaseAuthentication;
 import ru.skornei.restserver.server.converter.BaseConverter;
 import ru.skornei.restserver.server.dictionary.HeaderType;
 import ru.skornei.restserver.server.dictionary.ResponseStatus;
+import ru.skornei.restserver.server.exceptions.InvalidStreamException;
 import ru.skornei.restserver.server.exceptions.NoAnnotationException;
+import ru.skornei.restserver.server.exceptions.UnexpectedStreamEndingException;
 import ru.skornei.restserver.server.protocol.RequestInfo;
 import ru.skornei.restserver.server.protocol.ResponseInfo;
 import ru.skornei.restserver.utils.ReflectionUtils;
@@ -27,12 +30,12 @@ public abstract class BaseRestServer {
     /**
      * HTTP Server
      */
-    private HttpServer httpServer;
+    private final HttpServer httpServer;
 
     /**
      * Preview Manager Controller
      */
-    private Map<String, Class> controllers = new HashMap<>();
+    private final Map<String, Class<?>> controllers = new HashMap<>();
 
     /**
      * Object Converter
@@ -71,6 +74,7 @@ public abstract class BaseRestServer {
             for (Class<?> cls : restServer.controllers()) {
                 if (cls.isAnnotationPresent(RestController.class)) {
                     RestController restController = cls.getAnnotation(RestController.class);
+                    if (restController == null) continue;
                     controllers.put(restController.value(), cls);
                 }
             }
@@ -99,10 +103,11 @@ public abstract class BaseRestServer {
 
     /**
      * Get the controller for address
+     *
      * @param uri Address
      * @return Controller
      */
-    private Class getController(String uri) {
+    private Class<?> getController(String uri) {
         if (controllers.containsKey(uri))
             return controllers.get(uri);
 
@@ -135,7 +140,7 @@ public abstract class BaseRestServer {
             ResponseInfo responseInfo = new ResponseInfo();
 
             //Get the controller
-            Class cls = getController(session.getUri());
+            Class<?> cls = getController(session.getUri());
 
             //Found the controller
             if (cls != null) {
@@ -152,10 +157,15 @@ public abstract class BaseRestServer {
                     try {
                         //Read body
                         if (session.getHeaders().containsKey(HeaderType.CONTENT_LENGTH)) {
-                            Integer contentLength = Integer.valueOf(session.getHeaders().get(HeaderType.CONTENT_LENGTH));
+                            String contentLengthStr = session.getHeaders().get(HeaderType.CONTENT_LENGTH);
+                            if (contentLengthStr == null) contentLengthStr = "0";
+                            int contentLength = Integer.parseInt(contentLengthStr);
                             if (contentLength > 0) {
                                 byte[] buffer = new byte[contentLength];
-                                session.getInputStream().read(buffer, 0, contentLength);
+                                InputStream inputStream = session.getInputStream();
+                                if (inputStream == null) throw new InvalidStreamException();
+                                if (inputStream.read(buffer, 0, contentLength) != contentLength)
+                                    throw new UnexpectedStreamEndingException();
                                 requestInfo.setBody(buffer);
                             }
                         }
@@ -205,7 +215,7 @@ public abstract class BaseRestServer {
                             //If we are waiting for an object
                             Object paramObject = null;
                             if (converter != null) {
-                                Class paramClass = methodInfo.getParamClass();
+                                Class<?> paramClass = methodInfo.getParamClass();
                                 if (paramClass != null && requestInfo.isBodyAvailable()) {
                                     paramObject = converter.writeValue(requestInfo.getBody(), paramClass);
                                 }

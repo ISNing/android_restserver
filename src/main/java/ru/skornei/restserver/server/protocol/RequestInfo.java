@@ -8,17 +8,17 @@ public class RequestInfo {
     /**
      * Sender IP address
      */
-    private String remoteIpAddress;
+    private final String remoteIpAddress;
 
     /**
      * Headers
      */
-    private Map<String, String> headers;
+    private final Map<String, String> headers;
 
     /**
      * Parameters
      */
-    private Map<String, List<String>> parameters;
+    private final Map<String, List<String>> parameters;
 
     /**
      * Body

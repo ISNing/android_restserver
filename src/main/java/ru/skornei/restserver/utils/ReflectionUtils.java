@@ -25,8 +25,8 @@ public class ReflectionUtils {
      */
     public static class MethodInfo {
 
-        private Object object;
-        private Method method;
+        private final Object object;
+        private final Method method;
 
         public MethodInfo(Object object, Method method) {
             this.object = object;
@@ -34,23 +34,23 @@ public class ReflectionUtils {
         }
 
         public String getProduces() {
-            Annotation annotation = method.getAnnotation(Produces.class);
+            Produces annotation = method.getAnnotation(Produces.class);
             if (annotation != null)
-                return ((Produces) annotation).value();
+                return annotation.value();
 
             return null;
         }
 
         public String getAccept() {
-            Annotation annotation = method.getAnnotation(Accept.class);
+            Accept annotation = method.getAnnotation(Accept.class);
             if (annotation != null)
-                return ((Accept) annotation).value();
+                return annotation.value();
 
             return null;
         }
 
-        public Class getParamClass() {
-            for (Class cls : method.getParameterTypes()) {
+        public Class<?> getParamClass() {
+            for (Class<?> cls : method.getParameterTypes()) {
                 if (!Context.class.equals(cls) &&
                         !ResponseInfo.class.equals(cls) &&
                         !RequestInfo.class.equals(cls))
@@ -66,17 +66,14 @@ public class ReflectionUtils {
 
         public boolean isRequiresAuthentication() {
             Annotation annotation = method.getAnnotation(RequiresAuthentication.class);
-            if (annotation != null)
-                return true;
-
-            return false;
+            return annotation != null;
         }
 
-        public Object invoke(Object... params) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        public Object invoke(Object... params) throws InvocationTargetException, IllegalAccessException {
             List<Object> newParams = new ArrayList<>();
 
             //Сортируем в порядке указаных параметров
-            for (Class cls : method.getParameterTypes()) {
+            for (Class<?> cls : method.getParameterTypes()) {
                 for (Object param : params) {
                     if (cls.isInstance(param)) {
                         newParams.add(param);
@@ -91,12 +88,13 @@ public class ReflectionUtils {
 
     /**
      * Get a method that needs annotation
-     * @param object Object
-     * @param type Class
+     *
+     * @param object          Object
+     * @param type            Class
      * @param annotationClass Annotation
      * @return Method
      */
-    public static MethodInfo getDeclaredMethodInfo(Object object, Class<?> type, Class annotationClass) {
+    public static MethodInfo getDeclaredMethodInfo(Object object, Class<?> type, Class<? extends Annotation> annotationClass) {
         Method[] methods = type.getMethods();
 
         for (Method method : methods) {
