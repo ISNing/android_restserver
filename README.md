@@ -2,7 +2,7 @@ Android REST Server
 ========
 REST Server for Android.
 
-![jitpack](https://jitpack.io/v/ISNing/android_restserver.svg)
+[![](https://jitpack.io/v/ISNing/android_restserver.svg)](https://jitpack.io/#ISNing/android_restserver)
 
 ## Download
 Gradle:
